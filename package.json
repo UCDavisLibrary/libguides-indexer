@@ -1,7 +1,7 @@
 {
   "name": "@ucd-lib/libguides-indexer",
   "version": "0.0.1",
-  "description": "LibGuides crawler for indexing sites into ElasticSerach",
+  "description": "LibGuides crawler for indexing sites into ElasticSearch",
   "main": "index.js",
   "type": "module",
   "scripts": {

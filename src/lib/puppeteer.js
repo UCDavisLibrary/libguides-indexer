@@ -3,7 +3,17 @@ import Puppeteer from "puppeteer";
 class PuppeteerWrapper {
 
   async init() {
-    this.browser = await Puppeteer.launch();
+    if( this.browser ) {
+      try {
+        await this.browser.close();
+      } catch(e) {}
+    }
+
+    this.browser = await Puppeteer.launch({
+      headless: true, 
+      args:['--no-sandbox']
+    });
+
     this.page = await this.browser.newPage();
   }
 
