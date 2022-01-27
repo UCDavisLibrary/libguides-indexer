@@ -28,7 +28,11 @@ async function crawlSitemap(url) {
     }))];
   }
 
-  return {id: url, urls};
+  return {
+    id: url,
+    timestamp: new Date().toISOString(),
+    urls
+  };
 }
 
 export default crawlSitemap;

@@ -1,5 +1,4 @@
 import crawlSitemap from '../tasks/crawl-sitemap.js';
-import pubsub from '../pubsub.js';
 import storage from '../storage.js';
 import config from '../config.js';
 

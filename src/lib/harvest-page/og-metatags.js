@@ -1,12 +1,11 @@
 import puppeteer from '../puppeteer.js';
 
-async function dcMetatags() {
+async function ogMetatags() {
   let resp = await puppeteer.page.evaluate(() => 
     Array.from(document.querySelectorAll('meta'))
-      .filter(tag => (tag.getAttribute('name') || '')
-      .match(/^DC\./))
+      .filter(tag => (tag.getAttribute('property') || '').match(/^og:/))
       .map(tag => ({
-        name: tag.getAttribute('name').replace(/^DC\./, '').toLowerCase(),
+        name: tag.getAttribute('property').replace(/^og:/, '').toLowerCase(),
         value: tag.getAttribute('content')  
       }))
   );
@@ -17,4 +16,4 @@ async function dcMetatags() {
   return data;
 }
 
-export default dcMetatags;
+export default ogMetatags;
