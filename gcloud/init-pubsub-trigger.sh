@@ -39,6 +39,6 @@ gcloud pubsub subscriptions create $SUBSCRIPTION_NAME --topic $TOPIC_NAME \
    --push-auth-service-account=cloud-run-pubsub-invoker@$PROJECT_ID.iam.gserviceaccount.com \
    --dead-letter-topic=libguides-crawler-deadletter \
    --max-retry-delay=300 \ 
-   --min-retry-delay=10 \
+   --min-retry-delay=60 \
    --ack-deadline=120 \
-   --max-delivery-attempts=5
+   --max-delivery-attempts=10
