@@ -6,7 +6,8 @@ const config = {
   port : env.PORT || 8080,
 
   google : {
-    projectId : env.GOOGLE_PROJECT_ID || 'digital-ucdavis-edu'
+    projectId : env.GOOGLE_PROJECT_ID || 'digital-ucdavis-edu',
+    region : 'us-central1'
   },
 
   libguides : {
@@ -20,7 +21,23 @@ const config = {
   },
 
   pubsub : {
-    workerTopic : 'libguides-indexer-worker-'+branch
+    workerTopic : 'libguides-indexer-worker-'+branch,
+    workerSubscription : 'libguides-indexer-'+branch
+  },
+
+  scheduler : {
+    serviceAccount : env.SCHEDULER_SERVICE_ACCOUNT || '',
+    timeZone : 'Etc/UTC',
+    workerProcessing : {
+      nameRoot : 'libguides-worker-tasks-',
+      url : env.WORKER_URL || '',
+      cron : '* * * * *', // every minute
+      sitesPerRequest : 10, // number of sites to crawl per GC Scheduler cron request
+      stopBuffer : 2  // number of additional minutes before GC Scheduler is removed
+    },
+    mainService : {
+      url : env.SERVICE_URL || ''
+    }
   }
 }
 

@@ -1,4 +1,6 @@
-import { PubSub } from "@google-cloud/pubsub";
+// Imports the Google Cloud client library. v1 is for the lower level
+// proto access.
+import { PubSub, v1 } from "@google-cloud/pubsub";
 import config from './config.js';
 
 class PubSubWrapper {
@@ -7,15 +9,16 @@ class PubSubWrapper {
     this.client = new PubSub({
       projectId : config.google.projectId
     });
+    this.subClient = new v1.SubscriberClient({
+      projectId : config.google.projectId
+    });
   }
 
   async ensureTopic(topicName) {
     try {
       const [topic] = await this.client.createTopic(topicName);
       console.log(`Topic ${topic.name} created.`);
-    } catch(e) {
-      console.warn(`Failed to create topic: ${topicName}`, e);
-    }
+    } catch(e) {}
   }
 
   send(topic, msg) {
@@ -33,6 +36,62 @@ class PubSubWrapper {
       });
     });
     
+  }
+
+  /**
+   * @method process
+   * @description process pub sub messages.  Pulls a given number of pub/sub
+   * messages from topic, calls the callback function.  The callback
+   * function should return a promise, which is resolved when message
+   * processing is complete.  After the callback function completes
+   * this method will ack the message and return, resolving the returned
+   * function promise.
+   * 
+   * @param {String} topicName 
+   * @param {String} callback 
+   */
+  async process(topicName, count, callback) {
+    if( typeof count === 'function' ) {
+      callback = count;
+      count = 10;
+    }
+
+    const formattedSubscription = this.subClient.subscriptionPath(
+      config.google.projectId,
+      topicName
+    );
+
+    // The maximum number of messages returned for this request.
+    // Pub/Sub may return fewer than the number specified.
+    const request = {
+      subscription: formattedSubscription,
+      maxMessages: count,
+    };
+
+    // The subscriber pulls a specified number of messages.
+    const [response] = await this.subClient.pull(request);
+
+    // Process the messages.
+    const ackIds = [];
+    for (const message of response.receivedMessages) {
+      let data = Buffer.from(message.message.data, 'base64').toString().trim();
+      console.log(`Running message: ${data}`);
+      await callback(JSON.parse(data));
+      ackIds.push(message.ackId);
+    }
+
+    if (ackIds.length !== 0) {
+      // Acknowledge all of the messages. You could also acknowledge
+      // these individually, but this is more efficient.
+      const ackRequest = {
+        subscription: formattedSubscription,
+        ackIds: ackIds,
+      };
+  
+      await this.subClient.acknowledge(ackRequest);
+    }
+
+    return response.receivedMessages.length;
   }
 
 }

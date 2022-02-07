@@ -12,9 +12,13 @@
   "author": "jrmerz@ucdavis.edu",
   "license": "MIT",
   "dependencies": {
+    "@google-cloud/iam-credentials": "^1.1.1",
     "@google-cloud/pubsub": "^2.18.4",
+    "@google-cloud/scheduler": "^2.3.0",
     "@google-cloud/storage": "^5.18.0",
     "express": "^4.17.2",
+    "fetch": "^1.1.0",
+    "google-auth-library": "^7.11.0",
     "node-fetch": "^3.2.0",
     "puppeteer": "^13.1.1",
     "striptags": "^3.2.0",

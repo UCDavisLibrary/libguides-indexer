@@ -35,10 +35,5 @@ gcloud projects add-iam-policy-binding $PROJECT_ID \
 gcloud pubsub topics create $TOPIC_NAME
 
 gcloud pubsub subscriptions create $SUBSCRIPTION_NAME --topic $TOPIC_NAME \
-   --push-endpoint=$CLOUD_RUN_URL \
-   --push-auth-service-account=cloud-run-pubsub-invoker@$PROJECT_ID.iam.gserviceaccount.com \
    --dead-letter-topic=libguides-crawler-deadletter \
-   --max-retry-delay=300 \ 
-   --min-retry-delay=60 \
-   --ack-deadline=120 \
-   --max-delivery-attempts=10
+   --ack-deadline=120

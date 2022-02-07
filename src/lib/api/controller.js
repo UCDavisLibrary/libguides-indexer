@@ -1,8 +1,12 @@
+import express, { response } from 'express';
 import startHarvest from "./start-harvest.js";
 import pubsub from "../pubsub.js";
+import scheduler from "../scheduler.js";
 import config from "../config.js";
 
-async function controller(req, res) {
+const router = express.Router()
+
+router.get('/harvest', async (req, res) => {
   let test = (req.query.test === 'true');
   let data = await startHarvest();
 
@@ -20,8 +24,22 @@ async function controller(req, res) {
     console.log('sending pub/sub harvest: ', item.url);
     await pubsub.send(config.pubsub.workerTopic, msg);
   }
-}
+
+  scheduler.startWorkers(data.urls.length);
+});
+
+router.post('/stopSchedulers', async (req, res) => {
+  let schedulers = req.body.schedulers;
+
+  for( let id of schedulers ) {
+    await scheduler.deleteScheduler(id);
+  }
+
+  res.json({
+    success: true,
+    schedulers
+  })
+});
 
 
-
-export default controller;
+export default router;

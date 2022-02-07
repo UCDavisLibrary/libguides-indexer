@@ -19,15 +19,17 @@ gcloud beta run deploy $DEPLOYMENT_NAME-server \
   --max-instances=1 \
   --command="node" \
   --args="src/server.js" \
-  --set-env-vars=BRANCH=$BRANCH_NAME
+  --set-env-vars=BRANCH=$BRANCH_NAME \
+  --update-secrets=SERVICE_URL=libguides-indexer-main-server-url:latest,WORKER_URL=libguides-indexer-main-worker-url:latest
 
 gcloud beta run deploy $DEPLOYMENT_NAME-worker \
   --image $IMAGE \
   --platform managed \
   --memory=1Gi \
   --region=us-central1 \
-  --no-allow-unauthenticated \
+  --allow-unauthenticated \
   --max-instances=5 \
   --command="node" \
   --args="src/worker.js" \
-  --set-env-vars=BRANCH=$BRANCH_NAME
+  --set-env-vars=BRANCH=$BRANCH_NAME \
+  --update-secrets=SERVICE_URL=libguides-indexer-main-server-url:latest,WORKER_URL=libguides-indexer-main-worker-url:latest

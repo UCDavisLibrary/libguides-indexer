@@ -4,7 +4,7 @@ import controller from './lib/api/controller.js';
 const app = express();
 
 app.use(express.json());
-app.get('/', controller);
+app.use(controller);
 
 app.listen(config.port, () =>
   console.log(`libguides indexer listening on port ${config.port}`)
