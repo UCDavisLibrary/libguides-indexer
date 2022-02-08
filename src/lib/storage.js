@@ -32,9 +32,18 @@ class GCSStorage {
     return this.getBucket(config.storage.bucket).file(filename);
   }
 
+  deleteFile(fileName) {
+    return this.getBucket(config.storage.bucket).file(fileName).delete();
+  }
+
   async writeJson(filename, data) {
     await this.initBucket();
     return this.getFileObject(filename).save(JSON.stringify(data, '  ', '  '));
+  }
+
+  getFiles() {
+    return this.getBucket(config.storage.bucket)
+      .getFiles({autoPaginate: false });
   }
 
 }
