@@ -15,7 +15,6 @@ class PuppeteerWrapper {
     });
 
     this.page = await this.browser.newPage();
-    this.page.setDefaultNavigationTimeout(0);
   }
 
   /**
@@ -28,6 +27,12 @@ class PuppeteerWrapper {
     }, name);
 
     return resp;
+  }
+
+  goto(url) {
+    return this.page.goto(url, {
+      waitUntil: 'domcontentloaded'
+    });
   }
 
 }

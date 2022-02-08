@@ -4,6 +4,7 @@ import storage from './lib/storage.js';
 import puppeteer from "./lib/puppeteer.js";
 import harvestPage from './lib/tasks/harvest-page.js';
 import pubsub from './lib/pubsub.js';
+import scheduler from './lib/scheduler.js';
 
 const app = express();
 app.use(express.json());
@@ -19,14 +20,22 @@ app.get('/', async (req, res) => {
   busy = true;
 
   try {
+    // process the configured number of messages
     let processCount = await pubsub.process(
       config.pubsub.workerSubscription, 
       config.scheduler.workerProcessing.sitesPerRequest,
       handlePubSubMessage
     );
 
-    console.log('Process tasks: '+processCount);
+    console.log('Processed tasks: '+processCount);
     res.send('Success, processed '+processCount+' tasks');
+
+    // check if we should cancel scheduler
+    if( processCount === 0 && req.query['job-name'] ) {
+      console.log('Appears to be no more tasks in queue and scheduler job name provided.  Canceling scheduler: '+req.query['job-name']);
+      scheduler.deleteScheduler(req.query['job-name']);
+    }
+
   } catch(e) {
     console.error('Failed to run task', e.message, e.stack);
     res.status(400).send('Error: '+e.message);

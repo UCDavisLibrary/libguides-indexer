@@ -7,7 +7,7 @@ class GCSScheduler {
     this.client = new scheduler.CloudSchedulerClient();
   }
 
-  async startWorkers(taskCount) {
+  async startWorkers() {
     // Construct the fully qualified location path.
     const parent = this.client.locationPath(
       config.google.projectId, 
@@ -19,7 +19,7 @@ class GCSScheduler {
     const job = {
       name : parent+'/jobs/'+name,
       httpTarget: {
-        uri: config.scheduler.workerProcessing.url,
+        uri: config.scheduler.workerProcessing.url+'?job-name='+encodeURIComponent(name),
         httpMethod: 'GET'
       },
       schedule: config.scheduler.workerProcessing.cron,
@@ -35,9 +35,16 @@ class GCSScheduler {
     const [response] = await this.client.createJob(request);
     console.log(`Created worker job: ${response.name}`);
 
-   this.scheduleWorkComplete(name, taskCount); 
+  //  this.scheduleWorkComplete(name, taskCount); 
   }
 
+  /**
+   * @method scheduleWorkComplete
+   * @deprecated 
+   * 
+   * @param {*} workerSchedulerName 
+   * @param {*} taskCount 
+   */
   async scheduleWorkComplete(workerSchedulerName, taskCount) {
     // we are running sitesPerRequest every minute, so we need to expire
     // after taskCount/sitesPerRequest.  A ten minute buffer is added for

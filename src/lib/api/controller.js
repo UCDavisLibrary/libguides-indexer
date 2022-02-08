@@ -28,23 +28,22 @@ router.get('/harvest', async (req, res) => {
   scheduler.startWorkers(data.urls.length);
 });
 
-router.post('/stopSchedulers', async (req, res) => {
-  let schedulers = req.body.schedulers;
+// router.post('/stopSchedulers', async (req, res) => {
+//   let schedulers = req.body.schedulers;
 
-  for( let id of schedulers ) {
-    await scheduler.deleteScheduler(id);
-  }
+//   for( let id of schedulers ) {
+//     await scheduler.deleteScheduler(id);
+//   }
 
-  res.json({
-    success: true,
-    schedulers
-  })
-});
+//   res.json({
+//     success: true,
+//     schedulers
+//   })
+// });
 
 router.get('/restartSchedulers', async (req, res) => {
-  let count = parseInt(req.query.pages || 100)
-  scheduler.startWorkers(count);
-  res.json({success: true, pages: count});
+  scheduler.startWorkers();
+  res.json({success: true});
 });
 
 

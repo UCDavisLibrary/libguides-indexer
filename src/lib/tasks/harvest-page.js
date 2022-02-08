@@ -9,13 +9,16 @@ import childPages from '../harvest-page/child-pages.js';
 async function harvestPage(url, parent=true) {
   console.log('Harvesting: '+url);
 
-  await puppeteer.page.goto(url);
+  // load url
+  await puppeteer.goto(url);
 
+  // main data harvest
   let dublinCore = await dcMetatags();
   let openGraph = await ogMetatags();
   let lb = await libBoxes();
   let bc = await breadcrumbs();
 
+  // create response object, this will be stored, as is, in the google cloud bucket
   let data = {
     url, 
     id: crypto.createHash('md5').update(url).digest('hex'),

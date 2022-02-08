@@ -9,7 +9,7 @@ async function childPages() {
       .map(a => ({label: a.innerHTML, href: a.href}))
   ); 
   children.forEach(item => item.label = striptags(item.label).trim());
-  return children;
+  return children.filter(item => item.href.match(/^http(s)/))
 }
 
 export default childPages;
