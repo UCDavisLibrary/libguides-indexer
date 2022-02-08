@@ -15,6 +15,7 @@ class PuppeteerWrapper {
     });
 
     this.page = await this.browser.newPage();
+    this.page.setDefaultNavigationTimeout(0);
   }
 
   /**

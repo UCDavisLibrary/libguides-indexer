@@ -41,5 +41,11 @@ router.post('/stopSchedulers', async (req, res) => {
   })
 });
 
+router.get('/restartSchedulers', async (req, res) => {
+  let count = parseInt(req.query.pages || 100)
+  scheduler.startWorkers(count);
+  res.json({success: true, pages: count});
+});
+
 
 export default router;

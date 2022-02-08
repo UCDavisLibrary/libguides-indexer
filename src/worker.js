@@ -36,14 +36,18 @@ app.get('/', async (req, res) => {
 });
 
 async function handlePubSubMessage(data) {
-  await puppeteer.init();
+  try {
+    await puppeteer.init();
 
-  let content = await harvestPage(data.payload.url, data.payload.id);
+    let content = await harvestPage(data.payload.url, data.payload.id);
 
-  console.log('writing: '+data.payload.id+'.json');
-  await storage.writeJson(data.payload.id+'.json', content);
+    console.log('writing: '+data.payload.id+'.json');
+    await storage.writeJson(data.payload.id+'.json', content);
 
-  await puppeteer.browser.close();
+    await puppeteer.browser.close();
+  } catch(e) {
+    console.error('Failed to harvest page', data, e);
+  }
 }
 
 

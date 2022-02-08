@@ -28,6 +28,7 @@ gcloud beta run deploy $DEPLOYMENT_NAME-worker \
   --memory=1Gi \
   --region=us-central1 \
   --allow-unauthenticated \
+  --timeout=90 \
   --max-instances=5 \
   --command="node" \
   --args="src/worker.js" \

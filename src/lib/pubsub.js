@@ -72,20 +72,14 @@ class PubSubWrapper {
     const [response] = await this.subClient.pull(request);
 
     // Process the messages.
-    const ackIds = [];
     for (const message of response.receivedMessages) {
       let data = Buffer.from(message.message.data, 'base64').toString().trim();
       console.log(`Running message: ${data}`);
       await callback(JSON.parse(data));
-      ackIds.push(message.ackId);
-    }
 
-    if (ackIds.length !== 0) {
-      // Acknowledge all of the messages. You could also acknowledge
-      // these individually, but this is more efficient.
-      const ackRequest = {
+      let ackRequest = {
         subscription: formattedSubscription,
-        ackIds: ackIds,
+        ackIds: [message.ackId],
       };
   
       await this.subClient.acknowledge(ackRequest);

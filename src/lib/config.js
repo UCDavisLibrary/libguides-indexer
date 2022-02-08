@@ -32,8 +32,8 @@ const config = {
       nameRoot : 'libguides-worker-tasks-',
       url : env.WORKER_URL || '',
       cron : '* * * * *', // every minute
-      sitesPerRequest : 10, // number of sites to crawl per GC Scheduler cron request
-      stopBuffer : 2  // number of additional minutes before GC Scheduler is removed
+      sitesPerRequest : 5, // number of sites to crawl per GC Scheduler cron request
+      stopBuffer : 10  // number of additional minutes before GC Scheduler is removed
     },
     mainService : {
       url : env.SERVICE_URL || ''
