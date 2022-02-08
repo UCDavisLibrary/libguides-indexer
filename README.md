@@ -28,7 +28,7 @@ The `worker` service:
   - The crawler crawls the url/guide (and all linked child pages for the guide)
   - A [id].json file is written to the GCS bucket with the crawled and transformed libguide data.
   - This process is repeated `scheduler.workerProcessing.sitesPerRequest` (see `config.js`) times (defaults to 10).
-  - After there `sitesPerRequest` limit is reached or there are not more messages in the queue, the worker stops crawling.
+  - After there `sitesPerRequest` limit is reached or there are no more messages in the queue, the worker stops crawling.
 
 Notes.
  
@@ -43,9 +43,9 @@ A, forever living, Google Cloud Scheduler job kicks off the crawling process off
 # Development
 
 This section explains how to add/remove/fix functionality on the harvester.  The directory structure is broken out into a scriptable sections.
-  - `api` contains the main http controllers for the services
-  - `task` contains the worker or server tasks.  Really there are two; `crawl-sitemap.js` which the server runs to find the libguides to crawl and `harvest-page` which is responsible for extracting content from a libguide, including crawling the libguides child pages.
-  - `harvest-page` contains individual scripts that are responsible for extracting different parts of the libguides DOM content.  Examples include DublinCore metadata extracting, OpenGraph extracting, breadcrumb crawling, etc.  Note each one of the tasks gets its own script file and is then registered in `harvest-page`
+  - `lib/api` contains the main http controllers for the services
+  - `lib/task` contains the worker or server tasks.  Really there are two; `crawl-sitemap.js` which the server runs to find the libguides to crawl and `harvest-page.js` which is responsible for extracting content from a libguide, including crawling the libguides child pages.
+  - `lib/harvest-page` contains individual scripts that are responsible for extracting different parts of the libguides DOM content.  Examples include DublinCore metadata extracting, OpenGraph extracting, breadcrumb crawling, etc.  Note each one of the tasks gets its own script file and is then registered in `lib/tasks/harvest-page.js`
 
 
 ## Editing the guide harvest
@@ -53,8 +53,8 @@ This section explains how to add/remove/fix functionality on the harvester.  The
 To change/edit how and what is extracted from a libguide, you:
  - Make changes to the script files in `src/lib/harvest-page/`.  
  - The harvest script should import the `puppeteer` module, which is a wrapper around the global instance of chrome (`puppeteer.browser` and `puppeteer.page`).  
- - The `puppeteer.page` is already loaded to the current page, so everything is ready to go.  All you need to do is extact the data and return the extracted data.
- - It is recommended you use `puppeteer.page.evaluate` which lets you run any JavaScript you want in side the browsers page context.  Then returns the serializable JavaScript objects back to the NodeJS context.
+ - The `puppeteer.page` is already loaded to the current page, so everything is ready to go.  All you need to do is extact and return data.
+ - It is recommended you use `puppeteer.page.evaluate` which lets you run any JavaScript you want inside the browsers page context.  Then returns the serializable JavaScript objects back to the NodeJS context.
    - Please read documentation on this.  You can pass variables into the `evaluate` function and return data as well.  But these variables are passing through different JS contexts and therefore must be serializable (think JSON.stringify, JSON.parse).  So you can't, for example, return a DOM element from the `evaluate` script. https://pptr.dev/#?product=Puppeteer&version=v13.2.0&show=api-pageevaluatepagefunction-args
 
 Example extracting DublinCore metadata that is stored in the `head` tag as `meta` tags.
