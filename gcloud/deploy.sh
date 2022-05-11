@@ -20,7 +20,7 @@ gcloud beta run deploy $DEPLOYMENT_NAME-server \
   --command="node" \
   --args="src/server.js" \
   --set-env-vars=BRANCH=$BRANCH_NAME \
-  --update-secrets=SERVICE_URL=libguides-indexer-main-server-url:latest,WORKER_URL=libguides-indexer-main-worker-url:latest
+  --update-secrets=SERVICE_URL=libguides-indexer-main-server-url:latest,WORKER_URL=libguides-indexer-main-worker-url:latest,LIBGUIDES_SECRET_JSON=libguides-api-client-id-secret:latest
 
 gcloud beta run deploy $DEPLOYMENT_NAME-worker \
   --image $IMAGE \
