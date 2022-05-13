@@ -53,7 +53,7 @@ class HarvestDatabase {
   async harvest() {
     let databases = await this.fetchDatabases();
     if( !databases ) return;
-    await storage.writeJson('databases.json', JSON.stringify(databases));
+    await storage.writeJson(config.storage.databaseFile, databases);
   }
 
 }

@@ -36,7 +36,8 @@ const config = {
 
   storage : {
     bucket : 'libguides-indexer-'+branch,
-    indexFile : 'index.json'
+    indexFile : 'index.json',
+    databaseFile : 'databases.json'
   },
 
   pubsub : {

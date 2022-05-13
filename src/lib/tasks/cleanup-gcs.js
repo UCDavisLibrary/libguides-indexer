@@ -1,9 +1,12 @@
 import storage from "../storage.js";
+import config from "../config.js";
+
+const IGNORE_FILES = [config.storage.indexFile, config.storage.databaseFile];
 
 async function cleanupGCS(sitemap) {
   let [gcsFiles] = await storage.getFiles();
   gcsFiles = gcsFiles.map(file => file.name)
-    .filter(file => file !== 'index.json');
+    .filter(file => !IGNORE_FILES.includes(file));
 
   sitemap = sitemap.urls.map(item => item.id+'.json');
 
