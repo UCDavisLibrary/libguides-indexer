@@ -29,7 +29,7 @@ const config = {
       clientId : env.LIBGUIDES_CLIENT_ID || libguides.clientId,
       clientSecret : env.LIBGUIDES_CLIENT_SECRET || libguides.clientSecret,
       url : env.LIBGUIDES_API_URL || 'https://lgapi-us.libapps.com',
-      databasePath : '/1.2/az',
+      databasePath : '/1.2/az?expand=subjects,icons,friendly_url,az_types,az_props,permitted_uses',
       authPath : '/1.2/oauth/token'
     }
   },
