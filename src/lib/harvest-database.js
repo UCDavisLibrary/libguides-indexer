@@ -37,7 +37,7 @@ class HarvestDatabase {
       }
     });
 
-    resp = resp.json();
+    resp = await resp.json();
     if( resp.status ) {
       console.error(resp);
       // try one more time;
@@ -53,6 +53,7 @@ class HarvestDatabase {
   async harvest() {
     let databases = await this.fetchDatabases();
     if( !databases ) return;
+    if( databases.status ) return;
     await storage.writeJson(config.storage.databaseFile, databases);
   }
 
