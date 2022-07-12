@@ -3,7 +3,7 @@ import striptags from 'striptags';
 
 async function childPages() {
   let children = await puppeteer.page.evaluate(() => 
-    Array.from(document.querySelectorAll('.nav.nav-pills a'))
+    Array.from(document.querySelectorAll('[ucdlib-crawler="subpage-anchor"'))
       .filter(a => !(a.getAttribute('href') || '').match(/#/))
       .filter(a => !a.classList.contains('active'))
       .map(a => ({label: a.innerHTML, href: a.href}))

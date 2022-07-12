@@ -23,7 +23,7 @@ const config = {
   },
 
   libguides : {
-    host : env.LIBGUIDES_HOST || 'https://guides.library.ucla.edu',
+    host : env.LIBGUIDES_HOST || 'https://guides.library.ucdavis.edu',
     sitemap : env.LIBGUIDES_SITEMAP_PATH || '/sitemap.xml',
     api : {
       clientId : env.LIBGUIDES_CLIENT_ID || libguides.clientId,

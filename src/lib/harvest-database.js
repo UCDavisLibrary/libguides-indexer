@@ -54,6 +54,7 @@ class HarvestDatabase {
     let databases = await this.fetchDatabases();
     if( !databases ) return;
     if( databases.status ) return;
+    console.log(`Harvested ${databases.length} databases`);
     await storage.writeJson(config.storage.databaseFile, databases);
   }
 
