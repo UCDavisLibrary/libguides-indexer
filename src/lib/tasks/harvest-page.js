@@ -3,6 +3,7 @@ import puppeteer from '../puppeteer.js';
 import dcMetatags from '../harvest-page/dc-metatags.js';
 import ogMetatags from '../harvest-page/og-metatags.js';
 import libBoxes from '../harvest-page/lib-boxes.js';
+import author from '../harvest-page/author.js';
 import breadcrumbs from '../harvest-page/breadcrumbs.js';
 import childPages from '../harvest-page/child-pages.js';
 
@@ -17,6 +18,7 @@ async function harvestPage(url, parent=true) {
   let openGraph = await ogMetatags();
   let lb = await libBoxes();
   let bc = await breadcrumbs();
+  let authorEmail = await author();
 
   // create response object, this will be stored, as is, in the google cloud bucket
   let data = {
@@ -26,6 +28,7 @@ async function harvestPage(url, parent=true) {
     dublinCore,
     openGraph,
     libBoxes: lb,
+    author : authorEmail,
     timestamp : new Date().toISOString()
   }
 
