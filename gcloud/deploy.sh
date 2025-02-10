@@ -7,9 +7,9 @@ set -e
 
 source ./gcloud/config.sh
 
-# cork-kube build gcb \
-#   -p libguides-indexer \
-#   -v $BRANCH_NAME
+cork-kube build gcb \
+  -p libguides-indexer \
+  -v $BRANCH_NAME
 
 gcloud beta run deploy $IMAGE_NAME-$BRANCH_NAME-server \
   --image $IMAGE \
