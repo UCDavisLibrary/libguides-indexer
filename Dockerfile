@@ -1,4 +1,4 @@
-FROM node:17
+FROM node:20
 
 RUN apt-get update && \
   apt-get install -y libgconf-2-4 libatk1.0-0 libatk-bridge2.0-0 \

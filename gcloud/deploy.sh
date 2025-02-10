@@ -5,10 +5,12 @@ cd $ROOT_DIR/..
 
 set -e
 
-source ./gcloud/config.sh
+# source ./gcloud/config.sh
 
-gcloud config set project $PROJECT_ID
-gcloud builds submit --tag $IMAGE
+# gcloud config set project $PROJECT_ID
+# gcloud builds submit --tag $IMAGE
+
+
 
 gcloud beta run deploy $DEPLOYMENT_NAME-server \
   --image $IMAGE \
